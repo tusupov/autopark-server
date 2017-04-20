@@ -4,8 +4,8 @@
     
 	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.usupov.autopark</groupId>
-    <artifactId>autopark-rest</artifactId>
+    <groupId>com.usupov.productcard</groupId>
+    <artifactId>productcard-rest</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
@@ -16,20 +16,35 @@
     </parent>
 	
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>3.0.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
     </dependencies>
 
     <properties>

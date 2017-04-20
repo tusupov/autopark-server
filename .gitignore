@@ -36,3 +36,6 @@ overridedb.*
 .factorypath
 dump.rdb
 transaction-logs
+
+logs/
+src/main/resources/*
