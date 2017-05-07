@@ -38,4 +38,6 @@ dump.rdb
 transaction-logs
 
 logs/
+upload/
+upload/*
 src/main/resources/*

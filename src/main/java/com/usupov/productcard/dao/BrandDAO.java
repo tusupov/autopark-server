@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface BrandDAO {
 
-    public List<Brand> list();
+    public List<Brand> getList();
 
 }

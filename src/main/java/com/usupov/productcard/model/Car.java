@@ -1,54 +1,82 @@
 package com.usupov.productcard.model;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 public class Car {
 
-    private static AtomicLong counter = new AtomicLong();
-    private long id;
-    private String name;
-    private String imageUri;
-    private String description;
+    private long id, brandId, modelId, yearId;
+    private String brandName, modelName, yearName;
+    private String imageUrl;
 
     private String vin;
-
-    public Car(String name, String imageUri, String description) {
-        this.id          = counter.incrementAndGet();
-        this.name        = name;
-        this.imageUri    = imageUri;
-        this.description = description;
-    }
-
-    public Car(String name, String imageUri, String description, String vin) {
-        this.id          = counter.incrementAndGet();
-        this.name        = name;
-        this.imageUri    = imageUri;
-        this.description = description;
-        this.vin         = vin;
-    }
 
     public long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getImageUri() {
-        return imageUri;
+    public long getBrandId() {
+        return brandId;
     }
 
-    public String getDescription() {
-        return description;
+    public void setBrandId(long brandId) {
+        this.brandId = brandId;
+    }
+
+    public long getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(long modelId) {
+        this.modelId = modelId;
+    }
+
+    public long getYearId() {
+        return yearId;
+    }
+
+    public void setYearId(long yearId) {
+        this.yearId = yearId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getYearName() {
+        return yearName;
+    }
+
+    public void setYearName(String yearName) {
+        this.yearName = yearName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getVin() {
         return vin;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
+    public void setVin(String vin) {
+        this.vin = vin;
     }
-
 }

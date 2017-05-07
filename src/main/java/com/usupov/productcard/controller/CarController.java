@@ -1,6 +1,7 @@
 package com.usupov.productcard.controller;
 
 import com.usupov.productcard.config.CarRestURIConstants;
+import com.usupov.productcard.dao.CarDAO;
 import com.usupov.productcard.model.Car;
 import com.usupov.productcard.model.Vin;
 import com.usupov.productcard.service.CarService;
@@ -20,7 +21,7 @@ import java.util.List;
 public class CarController {
 
     @Autowired
-    private CarService carService;
+    private CarDAO carDAO;
 
     @Autowired
     private VinService vinService;
@@ -31,15 +32,15 @@ public class CarController {
     @RequestMapping(value = CarRestURIConstants.GET_ALL, method = RequestMethod.GET)
     public ResponseEntity<List<Car>> getCarList() {
 
-        List<Car> cars = carService.getAll();
+        List<Car> cars = carDAO.getAll();
         return new ResponseEntity<List<Car>>(cars, HttpStatus.OK);
 
     }
 
     @RequestMapping(value = CarRestURIConstants.GET_BY_ID, method = RequestMethod.GET)
-    public  ResponseEntity<Car> getCarByID(@PathVariable("id") int id) {
+    public ResponseEntity<Car> getCarByID(@PathVariable("id") int id) {
 
-        Car car = carService.getById(id);
+        Car car = carDAO.getById(id);
 
         if (car == null)
             return new ResponseEntity<Car>(HttpStatus.NOT_FOUND);
@@ -51,31 +52,37 @@ public class CarController {
     @RequestMapping(value = CarRestURIConstants.CREATE, headers = ("content-type=multipart/*"), method = RequestMethod.POST)
     public ResponseEntity<?> addCarByVin(@RequestParam("vin") String vin, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
-        Vin vinCar = vinService.getCar(vin);
+//        Vin vinCar = vinService.getCar(vin);
+//
+//        if(vinCar == null)
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//        Car car = new Car(
+//            vinCar.getName(),
+//            null,
+//            vinCar.getDescription(),
+//            vin
+//        );
+//
+//        String imageFullPath = fileService.save(file, car.getId());
+//        car.setImageUri(imageFullPath);
+//
+//        carService.add(car);
+//
+//        return new ResponseEntity<Car>(car, HttpStatus.OK);
 
-        if(vinCar == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        Car car = new Car(
-            vinCar.getName(),
-            null,
-            vinCar.getDescription(),
-            vin
-        );
-
-        String imageFullPath = fileService.save(file, car.getId());
-        car.setImageUri(imageFullPath);
-
-        carService.add(car);
-
-        return new ResponseEntity<Car>(car, HttpStatus.OK);
+        return null;
 
     }
 
     @RequestMapping(value = CarRestURIConstants.DELETE, method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCarById(@PathVariable("id") long id) {
-        carService.deleteById(id);
-        return new ResponseEntity<Car>(HttpStatus.OK);
+
+        if (carDAO.delete(id) > 0)
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+
     }
 
 }

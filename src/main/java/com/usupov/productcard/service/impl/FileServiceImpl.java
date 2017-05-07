@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -41,11 +42,22 @@ public class FileServiceImpl implements FileService {
 
     }
 
+    @Override
+    public String getCarImageUrl(long id) {
+
+        try {
+
+            if (Paths.get("upload", "car").resolve(id + ".jpg").toFile().exists())
+                return "http://88.99.174.4:8080/api/image/car/" + id;
+
+        } catch (Exception e) {}
+
+        return null;
+
+    }
 
     @Override
     public String savePart(MultipartFile file, long id, long cnt) {
-
-        System.out.println(id + " " + cnt);
 
 //        try {
 //
