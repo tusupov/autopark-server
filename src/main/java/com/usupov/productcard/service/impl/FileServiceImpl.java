@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class FileServiceImpl implements FileService {
 
     @Override
-    public String save(MultipartFile file, long id) {
+    public String saveCarImage(MultipartFile file, long id) {
 
         try {
 
@@ -32,7 +32,8 @@ public class FileServiceImpl implements FileService {
                     Paths.get("upload", "car").resolve(id + ".jpg")
                 );
 
-                return "http://88.99.174.4:8080/api/image/car/" + id;
+                //return "http://88.99.174.4:8080/api/image/car/" + id;
+                return "http://192.168.1.4:8080/api/image/car/" + id;
 
             }
 
@@ -48,7 +49,8 @@ public class FileServiceImpl implements FileService {
         try {
 
             if (Paths.get("upload", "car").resolve(id + ".jpg").toFile().exists())
-                return "http://88.99.174.4:8080/api/image/car/" + id;
+                //return "http://88.99.174.4:8080/api/image/car/" + id;
+                return "http://192.168.1.4:8080/api/image/car/" + id;
 
         } catch (Exception e) {}
 

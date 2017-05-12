@@ -7,9 +7,11 @@ public class CarRestURIConstants {
     /**
      * Cars
      */
-    public static final String GET_ALL    = "/cars";
-    public static final String GET_BY_ID  = "/car/{id}";
-    public static final String CREATE     = "/car/create";
-    public static final String DELETE     = "/car/delete/{id}";
+    public static final String GET_ALL        = "/cars";
+    public static final String GET_BY_ID      = "/car/{id}";
+    public static final String GET_BY_VIN     = "/car/vin/{vin}";
+    public static final String GET_BY_CATALOG = "/car/brand/{brandId}/model/{modelId}/year/{yearId}";
+    public static final String CREATE         = "/car/create";
+    public static final String DELETE         = "/car/delete/{id}";
 
 }

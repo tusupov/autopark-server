@@ -15,7 +15,7 @@ public interface CarDAO {
 
     Car getByVin(String vin);
 
-    void add(Car car);
+    long add(Car car);
 
     int delete(long id);
 

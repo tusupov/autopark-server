@@ -37,8 +37,6 @@ public class PartController {
             )
         );
 
-        System.out.println(partService.count(carId, categoryId));
-
         return new ResponseEntity<>(HttpStatus.OK);
 
     }

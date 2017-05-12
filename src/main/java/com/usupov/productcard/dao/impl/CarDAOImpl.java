@@ -11,9 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service("CarDAO")
@@ -55,7 +61,6 @@ public class CarDAOImpl implements CarDAO {
 
         }
 
-
     }
 
     @Override
@@ -70,12 +75,12 @@ public class CarDAOImpl implements CarDAO {
                 "INNER JOIN `pa_brands` as `b` ON `b`.`ID` = `c`.`BRAND_ID` " +
                 "INNER JOIN `pa_models` as `m` ON `m`.`ID` = `c`.`MODEL_ID` " +
                 "INNER JOIN `pa_years`  as `y` ON `y`.`ID` = `c`.`YEAR_ID` " +
-                "WHERE `c`.`ID` = " + id + " " +
+                "WHERE `c`.`ID` = ?" +
                 "LIMIT 1;";
 
         try {
 
-            Car car = jdbcTemplate.queryForObject(SQL, new CarMapper());
+            Car car = jdbcTemplate.queryForObject(SQL, new CarMapper(), id);
             car.setImageUrl(fileService.getCarImageUrl(car.getId()));
 
             return car;
@@ -90,17 +95,91 @@ public class CarDAOImpl implements CarDAO {
 
     @Override
     public Car getByVin(String vin) {
+
+        vin = vin.toUpperCase();
+
+        String SQL = "SELECT " +
+                "NULL as `ID`, " +
+                "`b`.`ID` as `BRAND_ID`, " +
+                "`b`.`NAME` as `BRAND_NAME`, " +
+                "`m`.`ID` as `MODEL_ID`, " +
+                "`m`.`NAME` as `MODEL_NAME`, " +
+                "`y`.`ID` as `YEAR_ID`," +
+                "`y`.`NAME` as `YEAR_NAME`," +
+                "`v`.`VIN`" +
+                "FROM `pa_vins` as `v` " +
+                "INNER JOIN `pa_brands` as `b` ON `b`.`CODE` = `v`.`BRAND_CODE` " +
+                "INNER JOIN `pa_models` as `m` ON `m`.`CODE` = `v`.`MODEL_CODE` AND `m`.`BRAND_ID` = `b`.`ID` " +
+                "INNER JOIN `pa_years`  as `y` ON `y`.`NAME` = `v`.`YEAR` AND `y`.`MODEL_ID` = `m`.`ID`" +
+                "WHERE UPPER(`v`.`VIN`) = ?;";
+
+        try {
+
+            Car car = jdbcTemplate.queryForObject(SQL, new CarMapper(), vin);
+            return car;
+
+        } catch (EmptyResultDataAccessException e) {}
+
         return null;
+
     }
 
     @Override
     public Car getByCatalog(long brandId, long modelId, long yearId) {
+
+        String SQL = "SELECT " +
+                "NULL as `ID`, " +
+                "`b`.`ID` as `BRAND_ID`, " +
+                "`b`.`NAME` as `BRAND_NAME`, " +
+                "`m`.`ID` as `MODEL_ID`, " +
+                "`m`.`NAME` as `MODEL_NAME`, " +
+                "`y`.`ID` as `YEAR_ID`," +
+                "`y`.`NAME` as `YEAR_NAME`, " +
+                "NULL as `VIN` " +
+                "FROM `pa_brands` as `b` " +
+                "INNER JOIN `pa_models` as `m`" +
+                "INNER JOIN `pa_years`  as `y`" +
+                "WHERE `b`.`ID` = ? AND `m`.`ID` = ? AND `y`.`ID` = ?;";
+
+        try {
+
+            Car car = jdbcTemplate.queryForObject(SQL, new CarMapper(), brandId, modelId, yearId);
+            return car;
+
+        } catch (EmptyResultDataAccessException e) {}
+
         return null;
+
     }
 
     @Override
-    public void add(Car car) {
+    public long add(Car car) {
 
+        String SQL = "INSERT INTO `pa_user_cars` (`BRAND_ID`, `MODEL_ID`, `YEAR_ID`, `VIN`) " +
+                "VALUES (?, ?, ?, ?);";
+
+        try {
+
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            int row = jdbcTemplate.update(
+                    new PreparedStatementCreator() {
+                        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                            PreparedStatement ps =
+                                    connection.prepareStatement(SQL, new String[] {"ID"});
+                            ps.setLong(1, car.getBrandId());
+                            ps.setLong(2, car.getModelId());
+                            ps.setLong(3, car.getYearId());
+                            ps.setString(4, car.getVin());
+                            return ps;
+                        }
+                    },
+                    keyHolder);
+
+            return row == 1 ? keyHolder.getKey().longValue() : 0;
+
+        } catch (Exception e) {}
+
+        return 0;
     }
 
     @Override

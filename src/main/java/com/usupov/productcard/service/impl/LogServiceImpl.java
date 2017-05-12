@@ -16,8 +16,6 @@ public class LogServiceImpl implements LogService {
     @Override
     public void add(String filePrefix, String log) {
 
-        System.out.println(log);
-
         try {
 
             (new File(Paths.get("logs").toString())).mkdirs();

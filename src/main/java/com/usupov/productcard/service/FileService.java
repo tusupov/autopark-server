@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface FileService  {
 
-    String save(MultipartFile file, long id) throws IOException;
+    String saveCarImage(MultipartFile file, long id) throws IOException;
 
     String getCarImageUrl(long id);
 
